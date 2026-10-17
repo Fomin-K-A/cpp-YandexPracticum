@@ -1,0 +1,176 @@
+Полная «классификация» калькулятора
+В заготовке кода выделены файлы для реализации двух классов:
+Calculator. Содержит логику работы самого калькулятора и хранит его данные. Этот класс вы реализовали в финальном задании прошлой темы. Он не требует изменений.
+CalculatorUI. Содержит логику разбора поступающих команд пользователя и вывод результатов и ошибок. Потоки ввода и вывода ему передаются извне.
+В файле main.cpp содержатся юнит-тесты для тестирования всей функциональности калькулятора. После прохождения тестов запускается интерфейс калькулятора, аналогичный тому, что был в предыдущей финальной задаче. Все примеры оттуда должны запускаться и здесь.
+Что нужно сделать
+Создайте класс CalculatorUI, переработайте код функции RunCalculatorCycle и на её основе сделайте метод Parse. В классе должен быть всего один публичный метод Parse. В этом методе происходит считывание команды из полученного потока, делегирование калькулятору и вывод результата. Также в классе есть конструктор, который принимает сам калькулятор и потоки для вывода результатов и ошибок, и вспомогательный метод ReadNumber, аналогичный одноимённой функции из предыдущей реализации.
+Список команд остаётся прежним:
++ <число> — сложить число в калькуляторе с прочитанным числом;
+аналогично — операции -, *, / и ** (возвести в степень);
+= — вывести текущее число в калькуляторе;
+: <число> — явно задать число в калькуляторе;
+c — очистить (установить число 0);
+q — выйти из программы;
+l — загрузить результат из ячейки памяти;
+s — сохранить результат в ячейку памяти.
+n — инвертировать текущее число в калькуляторе.
+Метод Parse должен вернуть true в случае успеха, а при ошибке — прекратить вычисления и вернуть значение false.
+Ограничения
+Используйте реализацию класса Calculator из своего решения финальной задачи темы «Классы», не меняя его.
+Класс CalculatorUI не должен напрямую использовать глобальные потоки std::cin, std::cout и std::err. Вместо этого он должен использовать ссылки на потоки, переданные извне.
+Как будет тестироваться ваш код
+Тренажёр проверит работу класса CalculatorUI юнит-тестами. Для его тестирования будет использоваться исходная версия класса Calculator. Функция main будет проигнорирована.
+Юнит-тесты
+Тест 1
+
+std::istringstream input{"15 q"};
+std::ostringstream output;
+std::ostringstream errors;
+
+Calculator calc;
+CalculatorUI ui{calc, output, errors};
+
+assert(ui.Parse(input));
+assert(output.str().empty());
+assert(errors.str().empty()); 
+Тест 2
+
+std::istringstream input{"42 / 6 + 3 = q"};
+std::ostringstream output;
+std::ostringstream errors;
+
+Calculator calc;
+CalculatorUI ui{calc, output, errors};
+ui.Parse(input);
+
+assert(calc.GetNumberRepr() == "10.000000");
+assert(output.str() == "10.000000\n");
+assert(errors.str().empty()); 
+Тест 3
+
+std::istringstream input{"2 + 2 * 2 = q"};
+std::ostringstream output;
+std::ostringstream errors;
+
+Calculator calc;
+CalculatorUI ui{calc, output, errors};
+ui.Parse(input);
+
+assert(output.str() == "8.000000\n");
+assert(errors.str().empty()); 
+Тест 4
+
+std::istringstream input{"2 + 2 * 2 = q"};
+std::ostringstream output;
+std::ostringstream errors;
+
+Calculator calc;
+CalculatorUI ui{calc, output, errors};
+ui.Parse(input);
+
+assert(output.str() == "8.000000\n");
+assert(errors.str().empty()); 
+Тест 5
+
+std::istringstream input{"-1 * -1 * -1 - -1 * -1 * -1 = q"};
+std::ostringstream output;
+std::ostringstream errors;
+
+Calculator calc;
+CalculatorUI ui{calc, output, errors};
+ui.Parse(input);
+
+assert(output.str() == "0.000000\n");
+assert(errors.str().empty()); 
+Тест 6
+
+std::istringstream input{"10 / 0 + 15 = q"};
+std::ostringstream output;
+std::ostringstream errors;
+
+Calculator calc;
+CalculatorUI ui{calc, output, errors};
+ui.Parse(input);
+
+assert(output.str() == "inf\n");
+assert(errors.str().empty()); 
+Тест 7
+
+std::istringstream input{"10 / -0 + 15 = q"};
+std::ostringstream output;
+std::ostringstream errors;
+
+Calculator calc;
+CalculatorUI ui{calc, output, errors};
+ui.Parse(input);
+
+assert(output.str() == "-inf\n");
+assert(errors.str().empty()); 
+Тест 8
+
+std::istringstream input{"10 + 5 =\n"
+                            ": 5 ** 5 =\n"
+                            "s + 5 =\n"
+                            "l =\n"
+                            "+ 10 =\n"
+                            "l =\n"
+                            "q"};
+std::ostringstream output;
+std::ostringstream errors;
+
+Calculator calc;
+CalculatorUI ui{calc, output, errors};
+ui.Parse(input);
+
+assert(output.str() == "15.000000\n3125.000000\n3130.000000\n"
+                        "3125.000000\n3135.000000\n3125.000000\n");
+assert(errors.str().empty()); 
+Тест 9
+
+std::istringstream input{"15 n = q"};
+std::ostringstream output;
+std::ostringstream errors;
+
+Calculator calc;
+CalculatorUI ui{calc, output, errors};
+ui.Parse(input);
+
+assert(output.str() == "-15.000000\n");
+assert(errors.str().empty()); 
+Тест 10
+
+std::istringstream input{"10 + 5 =\nl q"};
+std::ostringstream output;
+std::ostringstream errors;
+
+Calculator calc;
+CalculatorUI ui{calc, output, errors};
+ui.Parse(input);
+
+assert(output.str() == "15.000000\n");
+assert(errors.str() == "Error: Memory is empty\n"); 
+Тест 11
+
+std::istringstream input{"15 hello"};
+std::ostringstream output;
+std::ostringstream errors;
+
+Calculator calc;
+CalculatorUI ui{calc, output, errors};
+ui.Parse(input);
+
+assert(output.str().empty());
+assert(errors.str() == "Error: Unknown token hello\n"); 
+Тест 12
+
+std::istringstream input{"hello"};
+std::ostringstream output;
+std::ostringstream errors;
+
+Calculator calc;
+CalculatorUI ui{calc, output, errors};
+ui.Parse(input);
+
+assert(output.str().empty());
+assert(errors.str() == "Error: Numeric operand expected\n"); 
