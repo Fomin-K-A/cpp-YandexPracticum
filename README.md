@@ -12,5 +12,10 @@
 
 ## Интересные задачи на Qt
 
-| Задача | Описание | Репозиторий |
+| № | Описание | Репозиторий |
 |---|---|---|
+| 1 | Будильник | [Тык*](https://github.com/Fomin-K-A/cpp-Qt-Alarm) |
+| 2 | Видео плеер| [Тык*](https://github.com/Fomin-K-A/cpp-Qt-videoPlayer) |
+| 3 | Альбом | [Тык*](https://github.com/Fomin-K-A/cpp-Qt-photoalbum) |
+| 4 | Форматировщик дат | [Тык*](https://github.com/Fomin-K-A/cpp-Qt-format-date) |
+| 5 | Гороскоп | [Тык*](https://github.com/Fomin-K-A/cpp-Qt-calendar-horoscope) |
