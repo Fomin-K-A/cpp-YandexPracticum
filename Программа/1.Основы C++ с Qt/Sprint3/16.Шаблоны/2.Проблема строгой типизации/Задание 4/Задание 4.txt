@@ -1,0 +1,26 @@
+Что нужно сделать
+В уроке мы привели пример функции ToString, которая просто выводит переданный аргумент в поток. Такой подход сработает для типов с определённой операцией вывода. Привести к строке сложную конструкцию, например вектор, таким образом не получится. Чтобы ToString могла выводить элементы вектора, для него нужно написать собственную реализацию. Это вам и предстоит сделать.
+Напишите шаблонную функцию ToString, которая принимает вектор любого типа и возвращает строку с его значениями, записанными через запятую. Например, для аргумента vector<int>{1, 2, 3} функция должна вернуть строку 1, 2, 3.
+
+// vector<int>{1, 2, 3} -> "1, 2, 3".
+// vector<std::string>{"plus", "ultra"} -> "plus, ultra". 
+В заготовке вам даны:
+перегрузка вывода для pair — она нужна для проверки работы функции.
+Юнит-тесты
+
+assert((ToString(std::vector<int>{1, 2, 3}) == "1, 2, 3"s));
+assert((ToString(std::vector<int>{10}) == "10"s));
+assert((ToString(std::vector<int>{-5, 0, -10, 40}) == "-5, 0, -10, 40"s));
+assert((ToString(std::vector<int>{}) == ""s));
+
+assert((ToString(std::vector<std::string>{"plus"s, "ultra"s}) == "plus, ultra"s));
+assert((ToString(std::vector<std::string>{"hello"s}) == "hello"s));
+assert((ToString(std::vector<std::string>{}) == ""s));
+
+assert((ToString(std::vector<double>{1.1, 2.2, 0.3}) == "1.1, 2.2, 0.3"s));
+assert((ToString(std::vector<double>{-5.5, 0.1, 5.5, 0.001}) == "-5.5, 0.1, 5.5, 0.001"s));
+assert((ToString(std::vector<double>{}) == ""s));
+
+assert((ToString(std::vector<std::pair<int, int>>{{1, 2}, {3, 4}}) == "(1; 2), (3; 4)"s));
+assert((ToString(std::vector<std::pair<double, int>>{{1.1, 2}, {3.3, 4}, {5.5, 6}}) == "(1.1; 2), (3.3; 4), (5.5; 6)"s));
+assert((ToString(std::vector<std::pair<int, std::string>>{}) == ""s)); 

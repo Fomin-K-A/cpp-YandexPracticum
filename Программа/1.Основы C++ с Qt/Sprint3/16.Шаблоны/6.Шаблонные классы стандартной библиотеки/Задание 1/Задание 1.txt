@@ -1,0 +1,30 @@
+Довольно часто мы сталкиваемся с необходимостью вывести optional на экран. Для этого каждый раз приходится проверять, есть ли у него значение. Не очень-то удобно!
+Что нужно сделать
+Напишите перегрузку operator<< для типа optional. Она должна выводить значение или же текст «Значение не задано».
+Использовать перегрузку можно будет так:
+
+optional<int> opt_1(10);
+cout << opt_1; // Напечатает: 10.
+
+optional<int> opt_empty;
+cout << opt_empty; // Напечатает: "Значение не задано". 
+В заготовке вам дана функция ToString, которая перенаправляет значение из потока в строку. Это поможет нам протестировать вывод. 
+Юнит-тесты
+
+assert(ToString(std::optional<int>()) == "Значение не задано"s);
+assert(ToString(std::optional<double>()) == "Значение не задано"s);
+assert(ToString(std::optional<std::string>()) == "Значение не задано"s);
+assert(ToString(std::optional<bool>()) == "Значение не задано"s);
+
+assert(ToString(std::optional<int>{10}) == "10"s);
+assert(ToString(std::optional<int>{10234765}) == "10234765"s);
+assert(ToString(std::optional<int>{-627}) == "-627"s);
+
+assert(ToString(std::optional<double>{10}) == "10"s);
+assert(ToString(std::optional<double>{10.111}) == "10.111"s);
+
+assert(ToString(std::optional<std::string>{"hello"s}) == "hello"s);
+assert(ToString(std::optional<std::string>{"mew mew"s}) == "mew mew"s);
+
+assert(ToString(std::optional<char>{'U'}) == "U"s);
+assert(ToString(std::optional<char>{'*'}) == "*"s); 

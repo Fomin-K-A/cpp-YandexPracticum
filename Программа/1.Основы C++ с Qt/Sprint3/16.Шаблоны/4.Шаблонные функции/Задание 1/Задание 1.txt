@@ -1,0 +1,53 @@
+Функция swap меняет два значения местами. Например, так можно поменять значения двух переменных:
+
+int a = 15;
+int b = 42;
+std::swap(a, b);
+assert(a == 42);
+assert(b == 15); 
+Что нужно сделать
+Разработайте шаблонный вариант этой функции — Swap, который сможет менять местами значения переменных любого типа. Передача и получение двух значений происходят с помощью pair.
+Использовать функцию можно будет так:
+
+std::pair<int, int> p{3, 14};
+std::pair<int, int> q = Swap(p);
+assert((q == {14, 3})); 
+Но вместо int можно использовать любой другой тип.
+В заготовке вам дано:
+Структура Point с перегрузками ввода, вывода и сравнения и функция для сравнения типа pair — они пригодятся для тестирования.
+Юнит-тесты
+Тест 1
+
+assert((Swap(std::pair{627, 1}) == std::pair{1, 627}));
+assert((Swap(std::pair{1, 627}) == std::pair{627, 1}));
+assert((Swap(Swap(std::pair{1, 627})) == std::pair{1, 627}));
+
+assert((Swap(std::pair{1, 1}) == std::pair{1, 1}));
+assert((Swap(Swap(std::pair{1, 1})) == std::pair{1, 1}));
+
+assert((Swap(std::pair{-10, 0}) == std::pair{0, -10}));
+assert((Swap(std::pair{0, -10}) == std::pair{-10, 0}));
+assert((Swap(Swap(std::pair{0, -10})) == std::pair{0, -10})); 
+Тест 2
+
+assert((Swap(std::pair{"timey", "wimey"}) == std::pair{"wimey", "timey"}));
+assert((Swap(Swap(std::pair{"wimey", "timey"})) == std::pair{"wimey", "timey"}));
+
+assert((Swap(std::pair{"mew mew", "mew"}) == std::pair{"mew mew", "mew"}));
+assert((Swap(Swap(std::pair{"mew mew", "mew"})) == std::pair{"mew mew", "mew"}));
+
+assert((Swap(std::pair{"James Bond", ""}) == std::pair{"", "James Bond"}));
+assert((Swap(std::pair{"", "James Bond"}) == std::pair{"James Bond", ""}));
+assert((Swap(Swap(std::pair{"James Bond", ""})) == std::pair{"James Bond", ""})); 
+Тест 3
+
+assert(Swap(std::pair{Point{1, 2}, Point{3, 4}}) == std::pair{Point{3, 4}, Point{1, 2}});
+assert(Swap(std::pair{Point{-10, 20}, Point{300, 0}}) == std::pair{Point{300, 0}, Point{-10, 20}});
+assert(Swap(Swap(std::pair{Point{0, 1}, Point{1000, 4000}})) == std::pair{Point{0, 1}, Point{1000, 4000}});
+
+assert(Swap(std::pair{Point{1.1, 2.2}, Point{3.3, 4.4}}) == std::pair{Point{3.3, 4.4}, Point{1.1, 2.2}});
+assert(Swap(std::pair{Point{1.0, 0.0}, Point{0.005, 1.006}}) == std::pair{Point{0.005, 1.006}, Point{1.0, 0.0}});
+assert(Swap(Swap(std::pair{Point{2.71, 3.14}, Point{4.81, 2.66}})) == std::pair{Point{2.71, 3.14}, Point{4.81, 2.66}});
+
+assert(Swap(std::pair{Point{"1", "2"}, Point{"3", "4"}}) == std::pair{Point{"3", "4"}, Point{"1", "2"}});
+assert(Swap(Swap(std::pair{Point{"0", "1"}, Point{"a", "b"}})) == std::pair{Point{"a", "b"}, Point{"0", "1"}}); 
