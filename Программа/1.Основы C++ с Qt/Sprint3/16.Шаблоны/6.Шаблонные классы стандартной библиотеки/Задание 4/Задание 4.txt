@@ -1,0 +1,93 @@
+Что нужно сделать
+Напишите собственную реализацию класса optional. Добавьте в него методы для удобной работы:
+
+template <typename T>
+class Optional {
+    ...
+    
+    // Возвращает true, если класс содержит значение.
+    bool HasValue() const;
+    
+    // Возвращает значение.
+    T GetValue() const;
+    
+    // Устанавливает новое значение.
+    void SetValue(T value);
+    
+    // Удаляет значение.
+    void Reset();
+    
+    ...
+} 
+Метод GetValue должен возвращать значение, хранящееся в классе.
+Пример использования класса:
+
+auto optional = Optional<std::string>();
+assert(optional.HasValue() == false);
+
+optional.SetValue("Say mew"s);
+assert(optional.HasValue() == true);
+assert(optional.GetValue() == "Say mew"s);
+    
+optional.Reset();
+assert(optional.HasValue() == false); 
+Стандартный optional можно использовать для класса, не имеющего конструктора без параметров. От вашего Optional такого не требуется.
+Юнит-тесты
+Тест 1
+
+auto opt = Optional<int>();
+assert(opt.HasValue() == false);
+opt.Reset();
+assert(opt.HasValue() == false);
+
+opt.SetValue(0);
+assert(opt.HasValue() == true);
+assert(opt.GetValue() == 0);
+
+opt.SetValue(616);
+assert(opt.HasValue() == true);
+assert(opt.GetValue() == 616);
+
+opt.Reset();
+assert(opt.HasValue() == false); 
+Тест 2
+
+auto opt = Optional<std::string>();
+assert(opt.HasValue() == false);
+opt.Reset();
+assert(opt.HasValue() == false);
+
+opt.SetValue("Say hello"s);
+assert(opt.HasValue() == true);
+assert(opt.GetValue() == "Say hello"s);
+
+opt.SetValue("Say mew"s);
+assert(opt.HasValue() == true);
+assert(opt.GetValue() == "Say mew"s);
+
+opt.Reset();
+assert(opt.HasValue() == false); 
+Тест 3
+
+auto opt = Optional<int>(627);
+assert(opt.HasValue() == true);
+assert(opt.GetValue() == 627);
+
+opt.SetValue(-10);
+assert(opt.HasValue() == true);
+assert(opt.GetValue() == -10);
+
+opt.Reset();
+assert(opt.HasValue() == false); 
+Тест 4
+
+auto opt = Optional<char>('*');
+assert(opt.HasValue() == true);
+assert(opt.GetValue() == '*');
+
+opt.SetValue('~');
+assert(opt.HasValue() == true);
+assert(opt.GetValue() == '~');
+
+opt.Reset();
+assert(opt.HasValue() == false); 

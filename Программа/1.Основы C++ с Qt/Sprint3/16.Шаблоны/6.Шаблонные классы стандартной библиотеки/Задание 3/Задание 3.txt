@@ -1,0 +1,36 @@
+При анализе метеорологических данных часто требуется определить самые высокие и низкие показатели — будь то температура, давление или уровень осадков. При этом также полезно знать месяц, когда было сделано наблюдение. Для быстрого и удобного решения этой задачи пригодится функция, находящая минимальное и максимальное значения в списке, а также их порядковые номера.
+Что нужно сделать
+Напишите функцию FindMinMax, которая принимает вектор и возвращает кортеж с четырьмя значениями: минимумом, максимумом и их позициями. При этом тип возвращаемого значения должен быть optional<tuple>. Если функция получает пустой вектор, она должна вернуть std::nullopt.
+Пример работы функции:
+
+// Позиции элементов:               0  1  2  3  4  5  6
+auto value = FindMinMax(std::vector{1, 3, 0, 2, 5, 7, 1}).value();
+std::cout << std::get<0>(value) << std::endl; // 0 — минимальный элемент.
+std::cout << std::get<1>(value) << std::endl; // 2 — его позиция.
+std::cout << std::get<2>(value) << std::endl; // 7 — максимальный элемент.
+std::cout << std::get<3>(value) << std::endl; // 5 — и его позиция. 
+При этом FindMinMax должна быть шаблонной и уметь работать с любым типом данных. Если в векторе несколько одинаковых элементов, необходимо вернуть индекс первого из них.
+Юнит-тесты
+Тест 1
+
+assert(FindMinMax(std::vector{1, 2, 3}).has_value() == true);
+assert(FindMinMax(std::vector{1}).has_value() == true);
+assert(FindMinMax(std::vector{1.222, -5.8}).has_value() == true);
+assert(FindMinMax(std::vector{'4', '5', '6'}).has_value() == true);
+
+assert(FindMinMax(std::vector<char>{}).has_value() == false);
+assert(FindMinMax(std::vector<int>{}).has_value() == false);
+assert(FindMinMax(std::vector<bool>{}).has_value() == false); 
+Тест 2
+
+assert(FindMinMax(std::vector{1, 3, 0, 2, 5, 7, 1}) == std::tuple(0, 2, 7, 5));
+assert(FindMinMax(std::vector{1, -1000, 199, 55, 1010}) == std::tuple(-1000, 1, 1010, 4));
+assert(FindMinMax(std::vector{4, 4, 2, 2}) == std::tuple(2, 2, 4, 0));
+assert(FindMinMax(std::vector{0, 0, 0}) == std::tuple(0, 0, 0, 0));
+assert(FindMinMax(std::vector{-28, -28}) == std::tuple(-28, 0, -28, 0));
+assert(FindMinMax(std::vector{627}) == std::tuple(627, 0, 627, 0));
+
+assert(FindMinMax(std::vector{"h"s, "e"s, "l"s, "l"s, "o"s}) == std::tuple("e"s, 1, "o"s, 4));
+assert(FindMinMax(std::vector{"**"s, "**"s, "**"s, "**"s}) == std::tuple("**"s, 0, "**"s, 0));
+assert(FindMinMax(std::vector{"bbb"s, "aa"s}) == std::tuple("aa"s, 1, "bbb"s, 0));
+assert(FindMinMax(std::vector{"Hello"s}) == std::tuple("Hello"s, 0, "Hello"s, 0)); 

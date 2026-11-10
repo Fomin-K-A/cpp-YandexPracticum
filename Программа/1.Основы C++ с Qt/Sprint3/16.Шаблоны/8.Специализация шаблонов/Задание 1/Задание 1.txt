@@ -1,0 +1,45 @@
+В уроке мы рассмотрели пример со структурой IsConst, позволяющий проверить, является ли тип константным. Похожий подход можно использовать для других задач — например, чтобы сравнить два типа. Предлагаем вам это сделать.
+Что нужно сделать
+Создайте шаблонную структуру IsSameType, имеющую две версии: первая подходит, если в шаблонные параметры переданы два разных типа, вторая — если типы одинаковые. Структура должна хранить одно значение value — флаг равенства типов.
+Пример использования структуры:
+
+IsSameType<int, int>::value; // value == true.
+IsSameType<int, float>::value; // value == false. 
+Для сокращения записи в заготовке определена шаблонная переменная IsSameTypeV, которая позволит записать то же самое так:
+
+IsSameTypeV<int, int>; // true.
+IsSameTypeV<int, float>; // false. 
+IsSameTypeV опирается на значение IsSameType<...>::value, которое вам требуется определить.
+Юнит-тесты
+
+static_assert(IsSameTypeV<int, int>);
+static_assert(!IsSameTypeV<int, char>);
+static_assert(!IsSameTypeV<char, int>);
+static_assert(IsSameTypeV<char, char>);
+
+static_assert(IsSameTypeV<int, int>);
+static_assert(!IsSameTypeV<int, char>);
+static_assert(!IsSameTypeV<char, int>);
+static_assert(IsSameTypeV<char, char>);
+
+static_assert(!IsSameTypeV<int, int&>);
+static_assert(!IsSameTypeV<int&, int>);
+static_assert(IsSameTypeV<int&, int&>);
+
+static_assert(!IsSameTypeV<const int, int>);
+static_assert(!IsSameTypeV<int, const int>);
+static_assert(IsSameTypeV<const int, const int>);
+
+static_assert(!IsSameTypeV<int, std::vector<int>>);
+static_assert(!IsSameTypeV<int, std::tuple<int>>);
+static_assert(IsSameTypeV<std::vector<int>, std::vector<int>>);
+static_assert(IsSameTypeV<std::tuple<int>, std::tuple<int>>);
+static_assert(!IsSameTypeV<std::tuple<int, int>, std::tuple<int>>);
+static_assert(!IsSameTypeV<std::tuple<char, double>, std::tuple<double, char>>);
+
+static_assert(!IsSameTypeV<int, bool>);
+static_assert(IsSameTypeV<bool, bool>);
+static_assert(!IsSameTypeV<char, bool>);
+static_assert(IsSameTypeV<char, char>); 
+Ограничения
+Не используйте шаблоны стандартной библиотеки: std::is_same, std::is_same_v.

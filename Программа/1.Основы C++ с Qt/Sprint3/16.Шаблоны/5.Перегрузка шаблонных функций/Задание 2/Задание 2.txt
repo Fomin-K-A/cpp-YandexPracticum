@@ -1,0 +1,83 @@
+Что тяжелее: унция перьев или унция серебра? Казалось бы, ответ лежит на поверхности, но всё не так просто. Для взвешивания серебра используются тройские унции, а для перьев — обычные, и в них разное количество граммов. Мы предлагаем вам написать функцию, которая всё-таки умеет сравнивать веса серебра и перьев. 
+Количество унций будет записано в две разные структуры.
+
+// Структура для хранения обычных унций.
+struct Ounce {
+    double count; // Количество унций, которое у нас есть.
+    inline static double grams = 28.3495; // Сколько граммов в одной унции.
+};
+
+// Структура для хранения тройских унций.
+struct OunceTroy {
+    double count;
+    inline static double grams = 31.1;
+}; 
+Что нужно сделать
+Нужно написать перегруженную шаблонную функцию CompareOunces для сравнения этих структур.
+Если переданные параметры имеют один тип (оба Ounce или оба OunceTroy), вызывается первый вариант функции, который просто сравнивает их значения по полю count.
+Если параметры разные, используется вторая реализация, которая переводит оба значения в граммы и только потом выполняет сравнение.
+Функция должна возвращать одно из трёх значений:
+-1, если первое значение меньше;
+1, если второе значение меньше;
+0, если значения равны.
+Ниже приведён пример работы функции.
+
+assert((CompareOunces(Ounce{10}, Ounce{20}) == -1));
+assert((CompareOunces(OunceTroy{20}, OunceTroy{10}) == 1));
+assert((CompareOunces(Ounce{15}, Ounce{15}) == 0));
+
+assert((CompareOunces(OunceTroy{10}, Ounce{10}) == 1));
+assert((CompareOunces(Ounce{10}, OunceTroy{10}) == -1)); 
+Юнит-тесты
+Тест 1
+
+assert((CompareOunces(Ounce{1}, OunceTroy{1}) == -1));
+assert((CompareOunces(Ounce{10}, OunceTroy{10}) == -1));
+assert((CompareOunces(Ounce{10.111}, OunceTroy{10.111}) == -1));
+assert((CompareOunces(Ounce{10.05}, OunceTroy{1000}) == -1));
+
+assert((CompareOunces(Ounce{0}, OunceTroy{0}) == 0));
+assert((CompareOunces(Ounce{31.1}, OunceTroy{28.3495}) == 0));
+
+assert((CompareOunces(Ounce{10}, OunceTroy{0}) == 1));
+assert((CompareOunces(Ounce{10}, OunceTroy{1}) == 1));
+assert((CompareOunces(Ounce{10.99}, OunceTroy{10}) == 1)); 
+Тест 2
+
+assert((CompareOunces(Ounce{0}, Ounce{1}) == -1));
+assert((CompareOunces(Ounce{1}, Ounce{10}) == -1));
+assert((CompareOunces(Ounce{10.111}, Ounce{10.112}) == -1));
+
+assert((CompareOunces(Ounce{0}, Ounce{0}) == 0));
+assert((CompareOunces(Ounce{0.627}, Ounce{0.627}) == 0));
+
+assert((CompareOunces(Ounce{10}, Ounce{0}) == 1));
+assert((CompareOunces(Ounce{10}, Ounce{1}) == 1));
+assert((CompareOunces(Ounce{10.99}, Ounce{10}) == 1)); 
+Тест 3
+
+assert((CompareOunces(OunceTroy{0}, OunceTroy{2}) == -1));
+assert((CompareOunces(OunceTroy{2}, OunceTroy{20}) == -1));
+assert((CompareOunces(OunceTroy{20.222}, OunceTroy{20.2222}) == -1));
+
+assert((CompareOunces(OunceTroy{0}, OunceTroy{0}) == 0));
+assert((CompareOunces(OunceTroy{0.627}, OunceTroy{0.627}) == 0));
+
+assert((CompareOunces(OunceTroy{20}, OunceTroy{0}) == 1));
+assert((CompareOunces(OunceTroy{20}, OunceTroy{2}) == 1));
+assert((CompareOunces(OunceTroy{20.99}, OunceTroy{20}) == 1)); 
+Тест 4
+
+assert((CompareOunces(OunceTroy{0}, Ounce{30}) == -1));
+assert((CompareOunces(OunceTroy{3}, Ounce{30}) == -1));
+assert((CompareOunces(OunceTroy{30}, Ounce{32.99}) == -1));
+
+assert((CompareOunces(OunceTroy{0}, Ounce{0}) == 0));
+assert((CompareOunces(OunceTroy{28.3495}, Ounce{31.1}) == 0));
+
+assert((CompareOunces(OunceTroy{3}, Ounce{3}) == 1));
+assert((CompareOunces(OunceTroy{30}, Ounce{30}) == 1));
+assert((CompareOunces(OunceTroy{30.111}, Ounce{30.111}) == 1));
+assert((CompareOunces(OunceTroy{1000}, Ounce{33}) == 1)); 
+Как будет тестироваться код
+Будут выполнены юнит-тесты, а также специальная проверка на то, что у вас есть только две перегрузки.

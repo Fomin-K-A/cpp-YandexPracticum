@@ -1,0 +1,88 @@
+Операционная система Linux предоставляет своим пользователям три вида доступа к файлам:
+Read — чтение.
+Write — запись (изменение).
+Execute — выполнение.
+Пользователь может иметь любое количество прав в любой комбинации. Можно их выдавать, забирать и проверять их наличие.
+Что нужно сделать
+Первым шагом создайте перечисление Permissions с тремя флагами (READ, WRITE, EXECUTE).
+Также вам дана заготовка класса FileAccess, позволяющего управлять правами пользователя.
+Метод ToString позволяет увидеть битовое представление флага. Он нужен, чтобы упростить проверку.
+Допишите методы этого класса, используя поразрядные операции над флагами. Для решения этой задачи вы можете либо создать перегрузки для работы с типом Permissions, либо использовать приведение значений Permissions к int с помощью static_cast.
+Пример работы с правами:
+
+FileAccess file; // Сначала прав нет: 0000.
+
+file.SetPermission(Permissions::READ);
+std::cout << file.ToString() << std::endl; // Выведет 0001.
+
+std::cout << file.CheckPermission(Permissions::READ) << std:: endl;  // True.
+std::cout << file.CheckPermission(Permissions::WRITE) << std:: endl; // False.
+
+file.SetPermission(Permissions::WRITE); 
+std::cout << file.ToString() << std::endl; // Выведет 0011.
+
+file.RemovePermission(Permissions::READ); 
+std::cout << file.ToString() << std::endl; // Выведет 0010.
+
+file.TogglePermission(Permissions::READ); 
+file.TogglePermission(Permissions::WRITE);
+file.TogglePermission(Permissions::EXECUTE);
+std::cout << file.ToString() << std::endl; // Выведет 0101. 
+Юнит-тесты
+Тест 1
+
+FileAccess file;
+file.SetPermission(Permissions::READ);
+assert(file.CheckPermission(Permissions::READ));
+assert(!file.CheckPermission(Permissions::WRITE));
+assert(!file.CheckPermission(Permissions::EXECUTE));
+assert((file.ToString() == "0001"s ));
+
+file.SetPermission(Permissions::EXECUTE);
+assert((file.ToString() == "0101"s ));
+assert(file.CheckPermission(Permissions::READ));
+assert(!file.CheckPermission(Permissions::WRITE));
+assert(file.CheckPermission(Permissions::EXECUTE));
+
+file.SetPermission(Permissions::WRITE);
+assert((file.ToString() == "0111"s ));
+assert(file.CheckPermission(Permissions::READ));
+assert(file.CheckPermission(Permissions::WRITE));
+assert(file.CheckPermission(Permissions::EXECUTE));
+
+file.RemovePermission(Permissions::EXECUTE);
+assert((file.ToString() == "0011"s ));
+assert(file.CheckPermission(Permissions::READ));
+assert(file.CheckPermission(Permissions::WRITE));
+assert(!file.CheckPermission(Permissions::EXECUTE));
+
+file.RemovePermission(Permissions::READ);
+assert((file.ToString() == "0010"s ));
+assert(!file.CheckPermission(Permissions::READ));
+assert(file.CheckPermission(Permissions::WRITE));
+assert(!file.CheckPermission(Permissions::EXECUTE));
+
+file.RemovePermission(Permissions::WRITE);
+assert((file.ToString() == "0000"s ));
+assert(!file.CheckPermission(Permissions::READ));
+assert(!file.CheckPermission(Permissions::WRITE));
+assert(!file.CheckPermission(Permissions::EXECUTE));
+ 
+Тест 2
+
+FileAccess file;
+file.SetPermission(Permissions::WRITE);
+file.TogglePermission(Permissions::WRITE);
+assert((file.ToString() == "0000"s ));
+
+file.SetPermission(Permissions::READ);
+file.TogglePermission(Permissions::WRITE);
+assert((file.ToString() == "0011"s ));
+
+file.TogglePermission(Permissions::READ);
+file.TogglePermission(Permissions::EXECUTE);
+assert((file.ToString() == "0110"s ));
+
+file.TogglePermission(Permissions::WRITE);
+file.TogglePermission(Permissions::EXECUTE);
+assert((file.ToString() == "0000"s )); 

@@ -1,0 +1,51 @@
+В примере урока мы выводили объект Vector2D по координатам.
+
+template<typename T>
+std::ostream& operator<<(std::ostream &os, const Vector2D<T> &vec) {
+    return os << "[("s << vec.start_.x << ", "s << vec.start_.y 
+              << "), ("s << vec.end_.x << ", "s << vec.end_.y << ")]"s;
+} 
+Это не самый удобный способ, ведь у нас уже есть перегрузка вывода для точки. Почему бы нам не воспользоваться ей? Давайте так и сделаем!
+Что нужно сделать
+Реализуйте перегрузку ввода для Point, а затем — перегрузки ввода-вывода для Vector2D, основанные на функциях для точки.
+
+// Вывод Point. Эту функцию можно взять из урока.
+template<typename T>
+std::ostream& operator<< (std::ostream& os, const Point<T>& point);
+
+// Ввод Point.
+template<typename T>
+std::istream& operator>>(std::istream& is, Point<T>& point);
+
+// Вывод Vector2D.
+template<typename T>
+std::ostream& operator<<(std::ostream& os, const Vector2D<T>& vec);
+
+// Ввод Vector2D.
+template<typename T>
+std::istream& operator>>(std::istream& is, Vector2D<T>& vec); 
+В заготовке вам даны:
+реализации Point и Vector2D;
+функция TestCinCout, реализующая ввод и вывод значений в точки и отрезки;
+функция main, которая вызывает TestCinCout для разных типов данных.
+Примеры
+Пример 1
+Входные данные
+1 2 3 4 5 6 7 8 it is the land where beautys meaning flowers 
+Результат
+(1; 2)(3; 4)
+[(1; 2), (3; 4)]
+[(5; 6), (7; 8)]
+(it; is)(the; land)
+[(it; is), (the; land)]
+[(where; beautys), (meaning; flowers)] 
+Пример 2
+Входные данные
+-100 -10 -1 0 2 20 200 2000 3 33 333 3333 4 44 444 4444 
+Результат
+(-100; -10)(-1; 0)
+[(-100; -10), (-1; 0)]
+[(2; 20), (200; 2000)]
+(3; 33)(333; 3333)
+[(3; 33), (333; 3333)]
+[(4; 44), (444; 4444)] 
