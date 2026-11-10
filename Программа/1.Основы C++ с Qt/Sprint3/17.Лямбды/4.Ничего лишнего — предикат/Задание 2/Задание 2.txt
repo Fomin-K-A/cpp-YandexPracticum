@@ -1,0 +1,53 @@
+Путешествие — это всегда прекрасно! Отправимся в путь на поезде. Прежде надо узнать, есть ли доступные билеты. 
+В этой задаче вам предстоит проанализировать поступившую информацию о местах в купе поезда, в котором есть женские, мужские и смешанные купе. Путешествовать своей компанией веселее, поэтому не хочется разделять группу с другими пассажирами — будем искать полностью свободные купе в поезде.
+Купе описывается структурой Compartment:
+
+// Гендерный признак.
+enum class Gender {
+    MALE, FEMALE, NOT_SPECIFIED
+};
+
+// Характеристика места купе.
+enum class Place {
+  FREE,
+  NOT_FREE
+};
+
+// Купе – это четыре места и признак Gender. 
+struct Compartment {
+    Gender gender;
+    Place lower_left = Place::FREE;
+    Place lower_right = Place::FREE;
+    Place upper_left = Place::FREE;
+    Place upper_right = Place::FREE;
+}; 
+Что нужно сделать
+Разработайте функции, работающие с вектором купе:
+Функция-проверяльщик bool HasFreeCompartment(const std::vector<Compartment>& compartments, Gender gender) — возвращает истину при наличии в поезде хоть одного полностью свободного купе в зависимости от запроса по гендерному признаку (женское, мужское и без ограничений).
+Функция-счетовод int CountCompartment(const std::vector<Compartment>& compartments, Place is_empty, Gender gender) — считает количество купе. Параметр is_empty принимает значение — купе пустое или полностью заполненное. Параметр gender — ограничение купе по гендерному признаку (женское, мужское и без ограничений).
+Разработайте функции для формирования статистики:
+ 
+Возврат информации по наличию свободных купе для мужчин, женщин и без требования по гендерному признаку — функция FreeCompartment HasFreeCompartment(const std::vector<Compartment>& compartments) принимает на вход вектор купе и возвращает данные в структурированном виде:
+
+struct FreeCompartment {
+    bool has_free_compartment_for_men;
+    bool has_free_compartment_for_women;
+    bool has_free_compartment_for_all;
+}; 
+     При наличии свободного купе в поле запишите значение true, иначе — false. Для заполнения используйте функцию HasFreeCompartment.
+Возврат посчитанных свободных/занятых купе при разных значениях по гендерному признаку — функция CompartmentInfo GetCompartmentStat(const std::vector<Compartment>& compartments) принимает на вход вектор купе и возвращает данные в структурированном виде:
+
+struct CompartmentInfo {
+    int empty_for_men;
+    int empty_for_women;
+    int empty_for_all;
+
+    int full_for_men;
+    int full_for_women;
+    int full_for_all;
+}; 
+     Используйте CountCompartment, чтобы заполнить поля структуры CompartmentInfo.
+Ограничения
+В функциях реализуйте предикаты на основе лямбда-функций. Для доступа к внешним данным используйте захват внешних данных по значению. Чтобы проанализировать вектор с купе, используйте подходящий алгоритм.
+Как будет тестироваться код
+При тестировании будут использоваться функции FreeCompartment HasFreeCompartment(const std::vector<Compartment>& compartments) и CompartmentInfo GetCompartmentStat(const std::vector<Compartment>& compartments), на вход передадим вектор с данными и сравним результат с ожидаемым.
